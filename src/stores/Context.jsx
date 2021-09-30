@@ -1,0 +1,96 @@
+import React, {
+  useEffect,
+  useState,
+  useCallback,
+  useMemo,
+  useReducer,
+} from "react";
+
+import { useMediaQuery } from 'beautiful-react-hooks';
+import { useScrollYPosition } from "react-use-scroll-position";
+
+
+
+
+import { db } from "../firebase";
+import { toast } from "react-toastify";
+import { initialStateValues } from "../components/utils/constants";
+import { menus } from "../data/content";
+import { getElements } from "./firebaseAction";
+
+export const MyContext = React.createContext();
+
+const initialState = {
+  refs: {},
+  loading: false,
+  error: null,
+  currentPage: menus[0].name,
+  panelOpen: false,
+  content: menus,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "STORE_REF":
+      return {
+        ...state,
+        refs: {
+          ...state.refs,
+          [action.name]: action.ref,
+        },
+      };
+    case "SET_CURRENT_PAGE":
+      return {
+        ...state,
+        currentPage: action.data,
+        panelOpen: false
+      };
+    case "SET_PANEL":
+      return {
+        ...state,
+        panelOpen: !state.panelOpen,
+        currentPanel: action.data,
+      };
+    default:
+      throw new Error("action is not defined");
+  }
+};
+
+export const MainContext = (props) => {
+  const [elements, setElements] = useState([]);
+  const [currentId, setCurrentId] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [values, setValues] = useState(initialStateValues);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const isSmall = useMediaQuery('(max-width: 48rem)');
+  const isLarge = useMediaQuery('(min-width: 48rem)');
+  const yScroll = useScrollYPosition();
+  const panelSize = menus.length
+
+  useEffect(() => {
+    console.log('hey');
+  }, [yScroll])
+
+  useEffect(() => {
+    // getElements();
+  }, []);
+
+  return (
+    <MyContext.Provider
+      value={{
+        elements,
+        currentId,
+        setCurrentId,
+        editMode,
+        setEditMode,
+        values,
+        setValues,
+        state,
+        dispatch,
+        isLarge, isSmall
+      }}
+    >
+      {props.children}
+    </MyContext.Provider>
+  );
+};
