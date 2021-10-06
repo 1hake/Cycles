@@ -3,10 +3,15 @@ import { MyContext } from "../../stores/Context";
 import { menus } from "../../data/content";
 import { AnimatedMenuItem } from "../containers/AnimatedMenuItem";
 import { scrollToRef } from "../utils/tools";
-
 import { IParallax } from "@react-spring/parallax";
+import { Style } from "../../types/common";
 
-const classes = {
+interface MenuItemType {
+  index: number;
+  name?: string | null;
+}
+
+const classes: Style = {
   container: {
     display: "flex",
     justifyContent: "center",
@@ -14,39 +19,43 @@ const classes = {
     marginRight: "10px",
   },
   menuItem: {
-    padding: "20px",
+    padding: "15px",
     fontSize: "1.5em",
     fontWeight: "bold",
     color: "black",
-    zIndex: "1",
-    fontFamily: "Source Sans Pro",
+
+    transition: '0.5s ease-in-out'
   },
   selected: {
-    padding: "20px",
-    color: "black",
+    padding: "15px",
+    color: "white",
     fontSize: "1.5em",
     fontWeight: "bold",
-    fontFamily: "Source Sans Pro",
+    backgroundColor: 'black',
+    transition: '0.5s ease-in-out'
   },
 };
 
-const MenuItem = ({ name, isActive }) => {
+const MenuItem = ({ name, index }: MenuItemType) => {
   const {
     state: { refs, currentPage },
     dispatch,
   } = useContext(MyContext);
+
+  if (!name) {
+    return;
+  }
+
   return (
-    <AnimatedMenuItem name={name}>
-      <div
-        onClick={() => {
-          dispatch({ type: "SET_CURRENT_PAGE", data: name });
-          scrollToRef(refs[name]);
-        }}
-        style={currentPage === name ? classes.selected : classes.menuItem}
-      >
-        {name}
-      </div>
-    </AnimatedMenuItem>
+    <div
+      onClick={() => {
+        dispatch({ type: "SET_CURRENT_PAGE", data: name });
+        scrollToRef(refs[name]);
+      }}
+      style={currentPage === name ? classes.selected : classes.menuItem}
+    >
+      {name}
+    </div>
   );
 };
 
@@ -58,7 +67,7 @@ export const Menu = () => {
   return (
     <div style={classes.container}>
       {menus.map((item, index) => {
-        return <MenuItem name={item.name} index={index} />;
+        return index !== 0 && <MenuItem name={item.name} index={index} />;
       })}
     </div>
   );

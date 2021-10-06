@@ -6,12 +6,6 @@ import React, {
   useReducer,
 } from "react";
 
-import { useMediaQuery } from 'beautiful-react-hooks';
-import { useScrollYPosition } from "react-use-scroll-position";
-
-
-
-
 import { db } from "../firebase";
 import { toast } from "react-toastify";
 import { initialStateValues } from "../components/utils/constants";
@@ -43,7 +37,6 @@ const reducer = (state, action) => {
       return {
         ...state,
         currentPage: action.data,
-        panelOpen: false
       };
     case "SET_PANEL":
       return {
@@ -62,14 +55,6 @@ export const MainContext = (props) => {
   const [editMode, setEditMode] = useState(false);
   const [values, setValues] = useState(initialStateValues);
   const [state, dispatch] = useReducer(reducer, initialState);
-  const isSmall = useMediaQuery('(max-width: 48rem)');
-  const isLarge = useMediaQuery('(min-width: 48rem)');
-  const yScroll = useScrollYPosition();
-  const panelSize = menus.length
-
-  useEffect(() => {
-    console.log('hey');
-  }, [yScroll])
 
   useEffect(() => {
     // getElements();
@@ -87,7 +72,6 @@ export const MainContext = (props) => {
         setValues,
         state,
         dispatch,
-        isLarge, isSmall
       }}
     >
       {props.children}

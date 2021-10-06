@@ -13,11 +13,11 @@ export const SinglePage = () => {
   const animatedStyles = useSpring({
     to: {
       opacity: panelOpen ? "1" : "0",
-      position: "fixed",
-      zIndex: 1,
+      position: "fixed" /* Stay in place */,
+      zIndex: 1 /* Sit on top */,
       left: 0,
       top: 0,
-      width: "100%",
+      width: "100%" /* Full width */,
       height: panelOpen ? "100%" : "0%",
       backgroundColor: "white",
       display: "flex",
@@ -38,14 +38,8 @@ export const SinglePage = () => {
               backgroundImage: `url(${currentPanel.src})`,
             }}
           ></div>
-          <div
-            style={{
-              ...classes.image,
-              backgroundImage: `url(${currentPanel.src})`,
-            }}
-          ></div>
           <div style={classes.textContainer}>
-            <div style={classes.text}>{currentPanel.text}</div>
+            <p style={classes.text}>{currentPanel.text}</p>
             <div
               onClick={() => dispatch({ type: "SET_PANEL", data: null })}
               style={classes.back}
@@ -77,6 +71,7 @@ const classes = {
     justifyContent: "center",
     alignItems: "center",
     opacity: 0.95,
+    // backdropFilter: "blur(10px)",
   },
   panelClose: {
     position: "fixed" /* Stay in place */,
@@ -94,17 +89,19 @@ const classes = {
     height: "60vh",
     width: "20vw",
     transition: "0.5s ease-in-out",
+    marginRight: '10vw'
+
+    // boxShadow: "0px 0px 22px 5px rgba(0,0,0,0.3)",
   },
   text: {
     fontSize: "1rem",
     maxWidth: "500px",
     margin: "20px",
     color: "black",
-    backgroundColor: 'white',
-    padding: '10px'
   },
   back: {
     fontSize: "1rem",
+
     margin: "20px",
     color: "black",
   },

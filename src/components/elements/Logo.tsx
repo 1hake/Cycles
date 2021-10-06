@@ -2,11 +2,16 @@ import React, { useContext } from "react";
 import { MyContext } from "../../stores/Context";
 import { scrollToRef } from "../utils/tools";
 import LogoSVG from "../utils/logoSVG";
+import { Style } from "../../types/common";
 
-const classes = {
+
+
+const classes: Style = {
   logo: {
     marginLeft: "30px",
-    marginTop: "30px",
+    fontSize: '3em',
+    fontWeight: 'bold',
+    color: 'black'
   },
 };
 
@@ -17,13 +22,13 @@ export const Logo = () => {
   } = useContext(MyContext);
   return currentPage !== 'Contact' ? (
 
-    <LogoSVG
+    <div
       onClick={() => {
-        dispatch({ type: "SET_CURRENT_PAGE", data: "Offices" });
-        scrollToRef(refs["Offices"]);
+        console.log(refs);
+        scrollToRef(refs[Object.keys(refs)[0]]);
+        dispatch({ type: "SET_CURRENT_PAGE", data: Object.keys(refs)[0] });
       }}
       style={classes.logo}
-      alt=""
-    ></LogoSVG>
+    >Cycles</div>
   ) : <div style={classes.logo}></div>;
 };
